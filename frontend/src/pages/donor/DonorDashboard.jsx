@@ -4,7 +4,7 @@ import { getMyFoods } from "../../services/food.service";
 import FoodPostForm from "../../components/donor/FoodPostForm";
 import DonorFoodList from "../../components/donor/DonorFoodList";
 import EditFoodModal from "../../components/donor/EditFoodModal";
-import SpoilagePredictor from "../../components/donor/SpoilagePredictor";
+import SpoilagePredictor from "../../components/donor/spoilagePredictor";
 import { useEffect as useEffectSocket } from "react"; // skip if useEffect already imported
 import { useSocket } from "../../hooks/useSocket";
 
