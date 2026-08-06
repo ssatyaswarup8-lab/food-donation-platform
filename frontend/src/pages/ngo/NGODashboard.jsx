@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { getNearbyFoods } from "../../services/food.service";
 import { getMyClaims } from "../../services/claim.service";
 import NearbyFoodList from "../../components/ngo/NearbyFoodList";
-import ClaimCard from "../../components/ngo/ClaimCard";
+import ClaimCard from "../../components/ngo/Claimcard";
 
 const NGODashboard = () => {
   const { user, logout } = useAuth();
