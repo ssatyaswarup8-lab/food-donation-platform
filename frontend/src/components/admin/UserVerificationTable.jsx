@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getAllUsers, verifyUser, toggleUserStatus } from "../../services/admin.service";
+import toast from "react-hot-toast";
 
 const UserVerificationTable = () => {
   const [users, setUsers] = useState([]);
@@ -29,29 +30,31 @@ const UserVerificationTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roleFilter, verifiedFilter]);
 
-  const handleVerify = async (userId) => {
-    setActioningId(userId);
-    try {
-      await verifyUser(userId);
-      fetchUsers();
-    } catch (err) {
-      alert(err.response?.data?.message || "Failed to verify user");
-    } finally {
-      setActioningId(null);
-    }
-  };
+ const handleVerify = async (userId) => {
+  setActioningId(userId);
+  try {
+    await verifyUser(userId);
+    toast.success("User verified");
+    fetchUsers();
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to verify user");
+  } finally {
+    setActioningId(null);
+  }
+};
 
-  const handleToggleStatus = async (userId) => {
-    setActioningId(userId);
-    try {
-      await toggleUserStatus(userId);
-      fetchUsers();
-    } catch (err) {
-      alert(err.response?.data?.message || "Failed to update status");
-    } finally {
-      setActioningId(null);
-    }
-  };
+const handleToggleStatus = async (userId) => {
+  setActioningId(userId);
+  try {
+    await toggleUserStatus(userId);
+    toast.success("Status updated");
+    fetchUsers();
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to update status");
+  } finally {
+    setActioningId(null);
+  }
+};
 
   return (
     <div>

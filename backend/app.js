@@ -8,13 +8,16 @@ const claimRoutes = require("./routes/claim.routes");
 const deliveryRoutes = require("./routes/delivery.routes");
 const adminRoutes = require("./routes/admin.routes");
 const aiRoutes = require("./routes/ai.routes");
+const { generalLimiter } = require("./middlewares/rateLimiter.middleware");
+const reviewRoutes = require("./routes/review.routes");
 
 const app = express();
 
 app.use(cors({ origin: process.env.CLIENT_URL || "*", credentials: true }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use("/api", generalLimiter);
 app.use("/uploads", express.static("uploads"));
 
 app.get("/api/health", (req, res) => {
@@ -29,6 +32,7 @@ app.use("/api/claims", claimRoutes);
 app.use("/api/deliveries", deliveryRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/reviews", reviewRoutes);
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found" });
 });

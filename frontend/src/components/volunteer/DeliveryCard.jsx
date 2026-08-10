@@ -1,5 +1,6 @@
 import { useState } from "react";
 import StatusButtons from "./StatusButtons";
+import ReviewModal from "../common/ReviewModal";
 
 const statusColors = {
   pending_assignment: "gray",
@@ -12,6 +13,7 @@ const statusColors = {
 
 const DeliveryCard = ({ delivery, onChanged }) => {
   const [expanded, setExpanded] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   return (
     <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 6, marginBottom: 12 }}>
@@ -53,12 +55,28 @@ const DeliveryCard = ({ delivery, onChanged }) => {
           <p>Completed at: {delivery.completedAt ? new Date(delivery.completedAt).toLocaleString() : "—"}</p>
         </div>
       )}
-      <a href={`/delivery/${claim.deliveryId}/track`} target="_blank" rel="noreferrer">
+    <a href={`/delivery/${delivery._id}/track`} target="_blank" rel="noreferrer">
   Track Delivery
 </a>
 
-      <StatusButtons delivery={delivery} onChanged={onChanged} />
-    </div>
+<StatusButtons delivery={delivery} onChanged={onChanged} />
+
+{delivery.status === "completed" && (
+  <>
+    <button onClick={() => setShowReview(true)}>
+      Rate Donor / NGO
+    </button>
+
+    {showReview && (
+      <ReviewModal
+        deliveryId={delivery._id}
+        onClose={() => setShowReview(false)}
+      />
+    )}
+  </>
+)}
+
+</div>
   );
 };
 

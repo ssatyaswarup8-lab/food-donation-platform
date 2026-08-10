@@ -3,6 +3,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { getMyDeliveries } from "../../services/delivery.service";
 import DeliveryCard from "../../components/volunteer/DeliveryCard";
 import { useSocket } from "../../hooks/useSocket";
+import { SkeletonCard } from "../../components/common/Skeleton";
 
 const VolunteerDashboard = () => {
   const { user, logout } = useAuth();
@@ -93,7 +94,10 @@ useEffect(() => {
       </div>
 
       {loading ? (
-        <p>Loading deliveries...</p>
+        <>
+    <SkeletonCard />
+    <SkeletonCard />
+  </>
       ) : filteredDeliveries.length === 0 ? (
         <p>No deliveries to show in this view.</p>
       ) : (

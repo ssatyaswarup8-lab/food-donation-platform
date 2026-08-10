@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { claimFood } from "../../services/claim.service";
+import toast from "react-hot-toast";
+import { SkeletonCard } from "../common/Skeleton";
+import RatingBadge from "../common/RatingBadge";
 
 const NearbyFoodList = ({ foods, onClaimed, loading }) => {
   const [claimingId, setClaimingId] = useState(null);
-  const [error, setError] = useState("");
 
   const handleClaim = async (foodId) => {
-    setError("");
     setClaimingId(foodId);
     try {
       await claimFood(foodId);
+      toast.success("Food claimed successfully!");
       onClaimed();
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to claim food");
+      toast.error(err.response?.data?.message || "Failed to claim food");
     } finally {
       setClaimingId(null);
     }
@@ -26,7 +28,15 @@ const NearbyFoodList = ({ foods, onClaimed, loading }) => {
     return { text: `Expires in ${Math.round(hoursLeft)} hrs`, color: "green" };
   };
 
-  if (loading) return <p>Loading nearby food...</p>;
+if (loading) {
+  return (
+    <div>
+      <h3>Nearby Available Food</h3>
+      <SkeletonCard />
+      <SkeletonCard />
+    </div>
+  );
+}
 
   if (!foods || foods.length === 0) {
     return <p>No available food listings nearby right now. Check back soon.</p>;
@@ -35,7 +45,6 @@ const NearbyFoodList = ({ foods, onClaimed, loading }) => {
   return (
     <div>
       <h3>Nearby Available Food</h3>
-      {error && <p style={{ color: "red" }}>{error}</p>}
 
       <div style={{ display: "grid", gap: 12 }}>
         {foods.map((food) => {
@@ -60,6 +69,7 @@ const NearbyFoodList = ({ foods, onClaimed, loading }) => {
               </p>
               <p>Pickup: {food.pickupAddress}</p>
               <p>Donor: {food.donor?.organizationName || food.donor?.name}</p>
+              <RatingBadge userId={food.donor?._id} />
               <p style={{ color: urgency.color, fontWeight: "bold" }}>{urgency.text}</p>
 
               <button onClick={() => handleClaim(food._id)} disabled={claimingId === food._id}>

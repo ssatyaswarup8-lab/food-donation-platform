@@ -1,5 +1,7 @@
 import { cancelClaim } from "../../services/claim.service";
 import { useState } from "react";
+import ReviewModal from "../common/ReviewModal";
+
 
 const statusColors = {
   claimed: "orange",
@@ -9,6 +11,10 @@ const statusColors = {
 
 const ClaimCard = ({ claim, onChanged }) => {
   const [cancelling, setCancelling] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
+  
+
 
   const handleCancel = async () => {
     if (!window.confirm("Cancel this claim? The food will become available to other NGOs.")) return;
@@ -48,6 +54,15 @@ const ClaimCard = ({ claim, onChanged }) => {
           {cancelling ? "Cancelling..." : "Cancel Claim"}
         </button>
       )}
+
+      {deliveryStatus === "completed" && (
+  <>
+    <button onClick={() => setShowReview(true)}>Rate Donor / Volunteer</button>
+    {showReview && (
+      <ReviewModal deliveryId={claim.deliveryId} onClose={() => setShowReview(false)} />
+    )}
+  </>
+    )}
     </div>
   );
 };

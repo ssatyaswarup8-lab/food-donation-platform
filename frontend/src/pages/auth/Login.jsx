@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { login } = useAuth();
@@ -15,19 +16,22 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    try {
-      const userData = await login(formData);
-      redirectByRole(userData.role);
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const userData = await login(formData);
+    toast.success(`Welcome back, ${userData.name}!`);
+    redirectByRole(userData.role);
+  } catch (err) {
+    const msg = err.response?.data?.message || "Login failed";
+    setError(msg);
+    toast.error(msg);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const redirectByRole = (role) => {
     if (role === "donor") navigate("/donor/dashboard");

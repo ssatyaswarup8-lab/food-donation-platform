@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
+import { useSocket } from "../../hooks/useSocket";
 import { getMyFoods } from "../../services/food.service";
 import FoodPostForm from "../../components/donor/FoodPostForm";
 import DonorFoodList from "../../components/donor/DonorFoodList";
 import EditFoodModal from "../../components/donor/EditFoodModal";
-import SpoilagePredictor from "../../components/donor/spoilagePredictor";
-import { useEffect as useEffectSocket } from "react"; // skip if useEffect already imported
-import { useSocket } from "../../hooks/useSocket";
+import SpoilagePredictor from "../../components/donor/SpoilagePredictor";
+import { SkeletonCard } from "../../components/common/Skeleton";
 
 const DonorDashboard = () => {
   const { user, logout } = useAuth();
@@ -31,20 +32,19 @@ const DonorDashboard = () => {
     fetchFoods();
   }, []);
 
-
   useEffect(() => {
     if (!socket) return;
 
     const handleClaimed = (data) => {
-      alert(`Your food "${data.foodName}" was claimed by ${data.claimedBy}!`);
+      toast.success(`"${data.foodName}" was claimed by ${data.claimedBy}!`);
       fetchFoods();
     };
     const handleApproved = (data) => {
-      alert(`Your food "${data.foodName}" passed quality review!`);
+      toast.success(`"${data.foodName}" passed quality review!`);
       fetchFoods();
     };
     const handleRejected = (data) => {
-      alert(`Your food "${data.foodName}" was rejected: ${data.reason}`);
+      toast.error(`"${data.foodName}" was rejected: ${data.reason}`);
       fetchFoods();
     };
 
@@ -59,6 +59,7 @@ const DonorDashboard = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
+
   return (
     <div style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -75,10 +76,19 @@ const DonorDashboard = () => {
           NGOs may be limited until verified.
         </p>
       )}
+
       <SpoilagePredictor />
+
       <FoodPostForm onFoodPosted={fetchFoods} />
 
-      {loading ? <p>Loading your listings...</p> : <DonorFoodList foods={foods} onFoodChanged={fetchFoods} onEdit={setEditingFood} />}
+      {loading ? (
+        <>
+          <SkeletonCard />
+          <SkeletonCard />
+        </>
+      ) : (
+        <DonorFoodList foods={foods} onFoodChanged={fetchFoods} onEdit={setEditingFood} />
+      )}
 
       {editingFood && (
         <EditFoodModal

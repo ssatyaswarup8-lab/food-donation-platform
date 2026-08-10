@@ -1,5 +1,7 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { deleteFood } from "../../services/food.service";
+import ReviewModal from "../common/ReviewModal";
 
 const statusColors = {
   available: "green",
@@ -12,6 +14,7 @@ const statusColors = {
 
 const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
   const [deletingId, setDeletingId] = useState(null);
+  const [reviewingDeliveryId, setReviewingDeliveryId] = useState(null);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this listing?")) return;
@@ -19,9 +22,10 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
     setDeletingId(id);
     try {
       await deleteFood(id);
+      toast.success("Listing deleted");
       onFoodChanged();
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to delete listing");
+      toast.error(err.response?.data?.message || "Failed to delete listing");
     } finally {
       setDeletingId(null);
     }
@@ -42,12 +46,6 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
               <span style={{ color: statusColors[food.status] || "black", fontWeight: "bold" }}>
                 {food.status.toUpperCase()}
               </span>
-              {food.image && (
-                  <p style={{ fontSize: 12 }}>
-                  Quality: <strong>{food.qualityStatus?.toUpperCase()}</strong>
-                  {food.qualityStatus === "rejected" && ` — ${food.qualityRejectionReason}`}
-                   </p>
-)}
             </div>
 
             {food.image && (
@@ -58,21 +56,18 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
               />
             )}
 
+            {food.image && (
+              <p style={{ fontSize: 12 }}>
+                Quality: <strong>{food.qualityStatus?.toUpperCase()}</strong>
+                {food.qualityStatus === "rejected" && ` — ${food.qualityRejectionReason}`}
+              </p>
+            )}
+
             <p>
               {food.quantity} {food.quantityUnit} — {food.foodType}
             </p>
             <p>Pickup: {food.pickupAddress}</p>
             <p>Expires: {new Date(food.expiresAt).toLocaleString()}</p>
-
-            {food.status !== "available" && (
-           <a
-             href={`/delivery/${food.deliveryId}/track`}
-             target="_blank"
-            rel="noreferrer"
-      >
-    Track Delivery
-  </a>
-)}
 
             {food.status === "available" && (
               <div style={{ display: "flex", gap: 8 }}>
@@ -82,6 +77,20 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
                 </button>
               </div>
             )}
+            {food.status === "completed" && food.deliveryId && (
+  <>
+    <button onClick={() => setReviewingDeliveryId(food.deliveryId)}>
+      Rate NGO / Volunteer
+    </button>
+
+    {reviewingDeliveryId === food.deliveryId && (
+      <ReviewModal
+        deliveryId={food.deliveryId}
+        onClose={() => setReviewingDeliveryId(null)}
+      />
+    )}
+  </>
+)}
           </div>
         ))}
       </div>

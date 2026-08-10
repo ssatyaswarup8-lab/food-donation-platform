@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
 
 const Register = () => {
@@ -46,9 +47,12 @@ const Register = () => {
       const payload = { ...formData, ...coords };
 
       const userData = await register(payload);
+      toast.success(`Welcome, ${userData.name}! Registration successful.`);
       redirectByRole(userData.role);
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+      const msg = err.response?.data?.message || "Registration failed";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
