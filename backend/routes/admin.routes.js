@@ -13,17 +13,21 @@ const {
   getFoodCategoryBreakdown,
   approveFoodQuality,
   rejectFoodQuality,
+  bulkVerifyUsers,
+  getAuditLogs,
+  exportDeliveriesCSV,
+  exportUsersCSV,
 } = require("../controllers/admin.controller");
 
 const { protect } = require("../middlewares/auth.middleware");
 const { authorizeRoles } = require("../middlewares/role.middleware");
 
-// All admin routes require admin role
 router.use(protect, authorizeRoles("admin"));
 
 router.get("/users", getAllUsers);
 router.put("/users/:id/verify", verifyUser);
 router.put("/users/:id/toggle-status", toggleUserStatus);
+router.put("/users/bulk-verify", bulkVerifyUsers);
 
 router.get("/deliveries", getAllDeliveries);
 router.get("/foods", getAllFoodsAdmin);
@@ -32,7 +36,12 @@ router.get("/analytics/summary", getAnalyticsSummary);
 router.get("/analytics/daily", getDailyDonations);
 router.get("/analytics/monthly", getMonthlyDonations);
 router.get("/analytics/categories", getFoodCategoryBreakdown);
+
 router.put("/foods/:id/approve-quality", approveFoodQuality);
 router.put("/foods/:id/reject-quality", rejectFoodQuality);
+
+router.get("/audit-logs", getAuditLogs);
+router.get("/export/deliveries", exportDeliveriesCSV);
+router.get("/export/users", exportUsersCSV);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
 import { useSocket } from "../../hooks/useSocket";
@@ -7,7 +8,9 @@ import FoodPostForm from "../../components/donor/FoodPostForm";
 import DonorFoodList from "../../components/donor/DonorFoodList";
 import EditFoodModal from "../../components/donor/EditFoodModal";
 import SpoilagePredictor from "../../components/donor/SpoilagePredictor";
+import DonationHistory from "../../components/donor/DonationHistory";
 import { SkeletonCard } from "../../components/common/Skeleton";
+import ThemeToggle from "../../components/common/ThemeToggle";
 
 const DonorDashboard = () => {
   const { user, logout } = useAuth();
@@ -65,10 +68,13 @@ const DonorDashboard = () => {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h2>Donor Dashboard</h2>
         <div>
-          <span>Welcome, {user?.name} </span>
-          <button onClick={logout}>Logout</button>
-        </div>
+  <ThemeToggle />
+  <span> Welcome, {user?.name} </span>
+  <button onClick={logout}>Logout</button>
+</div>
       </div>
+
+      <Link to="/leaderboard">🏆 View Leaderboard</Link>
 
       {!user?.isVerified && (
         <p style={{ color: "orange" }}>
@@ -78,6 +84,8 @@ const DonorDashboard = () => {
       )}
 
       <SpoilagePredictor />
+
+      <DonationHistory />
 
       <FoodPostForm onFoodPosted={fetchFoods} />
 

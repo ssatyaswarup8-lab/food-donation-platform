@@ -1,6 +1,9 @@
 const User = require("../models/User.model");
 const generateToken = require("../utils/generateToken");
 const { success, error } = require("../utils/apiResponse");
+const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
+const { sendOTPEmail } = require("../services/notificationEmail.service");
 
 // @desc    Register new user (donor/ngo/volunteer)
 // @route   POST /api/auth/register
@@ -118,6 +121,76 @@ exports.getMe = async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return error(res, 404, "User not found");
     return success(res, 200, "User profile fetched", user);
+  } catch (err) {
+    return error(res, 500, err.message);
+  }
+};
+
+// @desc    Request password reset — sends OTP to email
+// @route   POST /api/auth/forgot-password
+// @access  Public
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return error(res, 400, "Email is required");
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Don't reveal whether the email exists — generic response
+      return success(res, 200, "If that email exists, an OTP has been sent");
+    }
+
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const hashedOTP = await bcrypt.hash(otp, 10);
+
+    user.resetOTP = hashedOTP;
+    user.resetOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await user.save();
+
+    await sendOTPEmail(user.email, user.name, otp);
+
+    return success(res, 200, "If that email exists, an OTP has been sent");
+  } catch (err) {
+    return error(res, 500, err.message);
+  }
+};
+
+// @desc    Verify OTP and reset password
+// @route   POST /api/auth/reset-password
+// @access  Public
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return error(res, 400, "Email, OTP, and new password are required");
+    }
+
+    if (newPassword.length < 6) {
+      return error(res, 400, "Password must be at least 6 characters");
+    }
+
+    const user = await User.findOne({ email }).select("+resetOTP +resetOTPExpires +password");
+
+    if (!user || !user.resetOTP || !user.resetOTPExpires) {
+      return error(res, 400, "Invalid or expired OTP");
+    }
+
+    if (Date.now() > user.resetOTPExpires) {
+      return error(res, 400, "OTP has expired. Please request a new one.");
+    }
+
+    const isMatch = await bcrypt.compare(otp, user.resetOTP);
+    if (!isMatch) {
+      return error(res, 400, "Invalid OTP");
+    }
+
+    user.password = newPassword; // will be hashed by pre-save hook
+    user.resetOTP = undefined;
+    user.resetOTPExpires = undefined;
+    await user.save();
+
+    return success(res, 200, "Password reset successfully. Please log in.");
   } catch (err) {
     return error(res, 500, err.message);
   }

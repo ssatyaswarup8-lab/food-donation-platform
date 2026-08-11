@@ -12,7 +12,7 @@ const FoodPostForm = ({ onFoodPosted }) => {
     expiresAt: "",
     pickupAddress: "",
   });
-  const [image, setImage] = useState(null);
+ const [images, setImages] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,9 +21,10 @@ const FoodPostForm = ({ onFoodPosted }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
+ const handleImageChange = (e) => {
+  const files = Array.from(e.target.files).slice(0, 5);
+  setImages(files);
+};
 
   const getLocation = () => {
     return new Promise((resolve) => {
@@ -51,8 +52,7 @@ const FoodPostForm = ({ onFoodPosted }) => {
       Object.keys(formData).forEach((key) => payload.append(key, formData[key]));
       payload.append("longitude", coords.longitude);
       payload.append("latitude", coords.latitude);
-      if (image) payload.append("image", image);
-
+      images.forEach((file) => payload.append("images", file));
       await createFood(payload);
 
       setSuccessMsg("Food listed successfully!");
@@ -146,8 +146,9 @@ const FoodPostForm = ({ onFoodPosted }) => {
           required
         />
 
-        <label>Food Image (optional):</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
+        <label>Food Images (up to 5):</label>
+        <input type="file" accept="image/*" multiple onChange={handleImageChange} />
+        {images.length > 0 && <p style={{ fontSize: 12 }}>{images.length} image(s) selected</p>}
 
         <button type="submit" disabled={loading}>
           {loading ? "Posting..." : "Post Food"}

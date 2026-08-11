@@ -44,7 +44,8 @@ exports.createFood = async (req, res) => {
       expiresAt,
       pickupAddress,
       donorId: req.user.id,
-      image: req.file ? `/uploads/${req.file.filename}` : "",
+      image: req.files && req.files[0] ? `/uploads/${req.files[0].filename}` : "",
+      images: req.files ? req.files.map((f) => `/uploads/${f.filename}`) : [],
       location: {
         type: "Point",
         coordinates: [parseFloat(longitude), parseFloat(latitude)],
@@ -69,19 +70,34 @@ exports.createFood = async (req, res) => {
 // @access  Private
 exports.getAllFoods = async (req, res) => {
   try {
-    const foods = await Food.find({
-      status: "available",
-      expiresAt: { $gt: new Date() },
-    })
-      .populate("donorId", "name organizationName phone address")
-      .sort({ createdAt: -1 });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    return success(res, 200, "Foods fetched successfully", foods);
+    const filter = { status: "available", expiresAt: { $gt: new Date() } };
+
+    const [foods, total] = await Promise.all([
+      Food.find(filter)
+        .populate("donorId", "name organizationName phone address")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Food.countDocuments(filter),
+    ]);
+
+    return success(res, 200, "Foods fetched successfully", {
+      foods,
+      pagination: {
+        page,
+        limit,
+        totalItems: total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (err) {
     return error(res, 500, err.message);
   }
 };
-
 // @desc    Get single food listing
 // @route   GET /api/foods/:id
 // @access  Private

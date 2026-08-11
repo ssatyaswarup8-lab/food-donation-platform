@@ -11,6 +11,8 @@ import DeliveryMonitor from "../../components/admin/DeliveryMonitor";
 import AnalyticsChart from "../../components/admin/AnalyticsChart";
 import DemandPredictionPanel from "../../components/admin/DemandPredictionPanel";
 import FoodQualityReview from "../../components/admin/FoodQualityReview";
+import AuditLogPanel from "../../components/admin/AuditLogPanel";
+import ThemeToggle from "../../components/common/ThemeToggle";
 
 
 const AdminDashboard = () => {
@@ -52,8 +54,9 @@ const AdminDashboard = () => {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h2>Admin Dashboard</h2>
         <div>
-          <span>Welcome, {user?.name} </span>
-          <button onClick={logout}>Logout</button>
+        <ThemeToggle />
+        <span> Welcome, {user?.name} </span>
+        <button onClick={logout}>Logout</button>
         </div>
       </div>
 
@@ -72,6 +75,9 @@ const AdminDashboard = () => {
         </button>
         <button onClick={() => setActiveTab("quality")} disabled={activeTab === "quality"}>
           Quality Review
+        </button>
+        <button onClick={() => setActiveTab("audit")} disabled={activeTab === "audit"}>
+          Audit Log
         </button>
       </div>
 
@@ -129,6 +135,7 @@ const AdminDashboard = () => {
       {activeTab === "deliveries" && <DeliveryMonitor />}
       {activeTab === "demand" && <DemandPredictionPanel />}
       {activeTab === "quality" && <FoodQualityReview />}
+      {activeTab === "audit" && <AuditLogPanel />}
     </div>
   );
 };

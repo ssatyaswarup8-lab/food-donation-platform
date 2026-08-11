@@ -48,13 +48,18 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
               </span>
             </div>
 
-            {food.image && (
-              <img
-                src={`${import.meta.env.VITE_SOCKET_URL}${food.image}`}
-                alt={food.foodName}
-                style={{ width: 150, height: 100, objectFit: "cover" }}
-              />
-            )}
+          {food.images && food.images.length > 0 && (
+  <div style={{ display: "flex", gap: 6, overflowX: "auto", marginBottom: 8 }}>
+    {food.images.map((img, idx) => (
+      <img
+        key={idx}
+        src={`${import.meta.env.VITE_SOCKET_URL}${img}`}
+        alt={`${food.foodName} ${idx + 1}`}
+        style={{ width: 100, height: 80, objectFit: "cover", borderRadius: 4 }}
+      />
+    ))}
+  </div>
+)}
 
             {food.image && (
               <p style={{ fontSize: 12 }}>

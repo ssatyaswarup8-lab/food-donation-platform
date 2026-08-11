@@ -12,6 +12,9 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import DeliveryTracking from "../pages/DeliveryTracking";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import ResetPassword from "../pages/auth/ResetPassword";
+import Leaderboard from "../pages/Leaderboard";
 
 const AppRoutes = () => {
   return (
@@ -20,6 +23,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+     
 
       <Route
         path="/donor/dashboard"
@@ -65,6 +69,16 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route
+    path="/leaderboard"
+    element={
+    <ProtectedRoute>
+      <Leaderboard />
+    </ProtectedRoute>
+    }
+    />
     </Routes>
   );
 };

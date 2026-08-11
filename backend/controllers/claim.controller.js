@@ -3,6 +3,7 @@ const Claim = require("../models/Claim.model");
 const { success, error } = require("../utils/apiResponse");
 const Delivery = require("../models/Delivery.model");
 const { notifyUser, broadcastEvent } = require("../services/notification.service");
+const { sendFoodClaimedEmail } = require("../services/notificationEmail.service");
 
 // @desc    NGO claims a food listing
 // @route   POST /api/claims/:foodId
@@ -65,6 +66,10 @@ notifyUser(food.donorId, "food-claimed", {
   claimedBy: ngo.organizationName || ngo.name,
 });
 
+const donorUser = await require("../models/User.model").findById(food.donorId);
+    if (donorUser) {
+      sendFoodClaimedEmail(donorUser.email, donorUser.name, food.foodName, ngo.organizationName || ngo.name);
+    }
 
 return success(
   res,

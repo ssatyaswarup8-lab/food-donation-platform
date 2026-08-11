@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getDeliveryById } from "../services/delivery.service";
 import LiveTrackingMap from "../components/map/LiveTrackingMap";
+import ChatBox from "../components/common/ChatBox";
 
 const DeliveryTracking = () => {
   const { id } = useParams();
@@ -44,6 +45,7 @@ const DeliveryTracking = () => {
       </p>
 
       <LiveTrackingMap delivery={delivery} />
+      <ChatBox deliveryId={delivery._id} />
     </div>
   );
 };

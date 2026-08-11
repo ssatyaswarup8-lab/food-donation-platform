@@ -37,6 +37,11 @@ const foodSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    images: [
+      {
+        type: String,
+      },
+    ],
     qualityStatus: {
       type: String,
       enum: ["pending", "approved", "rejected"],

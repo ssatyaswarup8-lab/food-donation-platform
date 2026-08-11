@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { getNearbyFoods } from "../../services/food.service";
 import { getMyClaims } from "../../services/claim.service";
 import NearbyFoodList from "../../components/ngo/NearbyFoodList";
-import ClaimCard from "../../components/ngo/Claimcard";
+import ClaimCard from "../../components/ngo/ClaimCard";
+import ThemeToggle from "../../components/common/ThemeToggle";
 
 const NGODashboard = () => {
   const { user, logout } = useAuth();
@@ -44,7 +46,7 @@ const NGODashboard = () => {
   }, [activeTab, distance]);
 
   const handleClaimed = () => {
-    fetchFoods(); // refresh so claimed item disappears from browse list
+    fetchFoods();
   };
 
   return (
@@ -52,10 +54,13 @@ const NGODashboard = () => {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h2>NGO Dashboard</h2>
         <div>
-          <span>Welcome, {user?.name} </span>
-          <button onClick={logout}>Logout</button>
+            <ThemeToggle />
+            <span> Welcome, {user?.name} </span>
+            <button onClick={logout}>Logout</button>
         </div>
       </div>
+
+      <Link to="/leaderboard">🏆 View Leaderboard</Link>
 
       {!user?.isVerified && (
         <p style={{ color: "orange" }}>
@@ -64,7 +69,7 @@ const NGODashboard = () => {
         </p>
       )}
 
-      <div style={{ marginBottom: 16 }}>
+      <div style={{ marginBottom: 16, marginTop: 16 }}>
         <button onClick={() => setActiveTab("browse")} disabled={activeTab === "browse"}>
           Browse Nearby Food
         </button>

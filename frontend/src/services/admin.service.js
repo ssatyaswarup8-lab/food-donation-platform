@@ -60,3 +60,35 @@ export const getAllFoodsAdmin = async (status) => {
   const res = await api.get(`/admin/foods${status ? `?status=${status}` : ""}`);
   return res.data;
 };
+
+export const bulkVerifyUsers = async (userIds) => {
+  const res = await api.put("/admin/users/bulk-verify", { userIds });
+  return res.data;
+};
+
+export const getAuditLogs = async (action) => {
+  const res = await api.get(`/admin/audit-logs${action ? `?action=${action}` : ""}`);
+  return res.data;
+};
+
+export const exportDeliveriesCSV = async () => {
+  const res = await api.get("/admin/export/deliveries", { responseType: "blob" });
+  const url = window.URL.createObjectURL(new Blob([res.data]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", "deliveries-export.csv");
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+export const exportUsersCSV = async () => {
+  const res = await api.get("/admin/export/users", { responseType: "blob" });
+  const url = window.URL.createObjectURL(new Blob([res.data]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", "users-export.csv");
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};

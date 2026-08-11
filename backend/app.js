@@ -10,10 +10,20 @@ const adminRoutes = require("./routes/admin.routes");
 const aiRoutes = require("./routes/ai.routes");
 const { generalLimiter } = require("./middlewares/rateLimiter.middleware");
 const reviewRoutes = require("./routes/review.routes");
+const chatRoutes = require("./routes/chat.routes");
+const certificateRoutes = require("./routes/certificate.routes");
+const leaderboardRoutes = require("./routes/leaderboard.routes");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const app = express();
 
 app.use(cors({ origin: process.env.CLIENT_URL || "*", credentials: true }));
+app.use("/api/chat", chatRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use("/api/certificates", certificateRoutes);
+app.use("/api/leaderboard", leaderboardRoutes);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

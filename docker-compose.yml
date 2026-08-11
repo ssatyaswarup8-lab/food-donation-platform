@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: food-donation-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: food-donation-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/food-donation-platform
+    depends_on:
+      - mongodb
+    volumes:
+      - uploads-data:/app/uploads
+
+  frontend:
+    build: ./frontend
+    container_name: food-donation-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
+  uploads-data:

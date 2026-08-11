@@ -31,6 +31,27 @@ const initSocket = (server) => {
       socket.join(deliveryId);
     });
 
+    // Real-time chat: client sends a message, we broadcast it to the delivery room
+    socket.on("send-chat-message", async (data) => {
+      // data: { deliveryId, senderId, senderRole, text }
+      try {
+        const Message = require("../models/Message.model");
+        const message = await Message.create({
+          deliveryId: data.deliveryId,
+          senderId: data.senderId,
+          senderRole: data.senderRole,
+          text: data.text,
+          readBy: [data.senderId],
+        });
+
+        const populated = await message.populate("senderId", "name role");
+
+        io.to(data.deliveryId).emit("new-chat-message", populated);
+      } catch (err) {
+        console.error("Chat message error:", err.message);
+      }
+    });
+
     socket.on("disconnect", () => {
       console.log(`Socket disconnected: ${socket.id}`);
     });

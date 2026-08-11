@@ -14,10 +14,11 @@ const {
 
 const { protect } = require("../middlewares/auth.middleware");
 const { authorizeRoles } = require("../middlewares/role.middleware");
-const upload = require("../middlewares/upload.middleware");
 const { createFoodValidation, updateFoodValidation } = require("../validators/food.validator");
 const validate = require("../middlewares/validate.middleware");
 const { createFoodLimiter } = require("../middlewares/rateLimiter.middleware");
+const upload = require("../middlewares/upload.middleware");
+const { uploadMultiple } = require("../middlewares/upload.middleware");
 
 router.get("/my-listings", protect, authorizeRoles("donor"), getMyFoods);
 router.get("/nearby", protect, authorizeRoles("ngo"), getNearbyFoods);
@@ -27,7 +28,7 @@ router.post(
   protect,
   authorizeRoles("donor"),
   createFoodLimiter,
-  upload.single("image"),
+  uploadMultiple,
   createFoodValidation,
   validate,
   createFood

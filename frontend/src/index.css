@@ -297,3 +297,37 @@ table {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+
+[data-theme="dark"] {
+  --primary-green: #4caf50;
+  --primary-green-dark: #66bb6a;
+  --primary-green-light: #1b3a1c;
+  --accent-orange: #ffb74d;
+  --accent-orange-dark: #ffa726;
+  --bg-color: #121a12;
+  --card-bg: #1c261c;
+  --text-dark: #eafbea;
+  --text-muted: #a0b3a1;
+  --border-color: #2e3e2f;
+}
+
+[data-theme="dark"] body {
+  background-image: radial-gradient(circle at top left, #182018 0%, var(--bg-color) 60%);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: #232f23;
+  color: var(--text-dark);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] table {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] tbody tr:hover {
+  background-color: #223022;
+}
