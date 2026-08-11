@@ -29,7 +29,13 @@ export const getFoodById = async (id) => {
   return res.data;
 };
 
+
 export const getAllFoodsPaginated = async (page = 1, limit = 10) => {
   const res = await api.get(`/foods?page=${page}&limit=${limit}`);
+  return res.data;
+};
+
+export const getNearbyFoods = async () => {
+  const res = await api.get("/foods/nearby");
   return res.data;
 };
