@@ -8,11 +8,11 @@ import {
 } from "../../services/admin.service";
 import UserVerificationTable from "../../components/admin/UserVerificationTable";
 import DeliveryMonitor from "../../components/admin/DeliveryMonitor";
-import AnalyticsChart from "../../components/admin/AnalyticsChart";
-import DemandPredictionPanel from "../../components/admin/DemandPredictionPanel";
+import { DailyLineChart, MonthlyBarChart, CategoryPieChart } from "../../components/admin/RechartsPanel";import DemandPredictionPanel from "../../components/admin/DemandPredictionPanel";
 import FoodQualityReview from "../../components/admin/FoodQualityReview";
 import AuditLogPanel from "../../components/admin/AuditLogPanel";
 import ThemeToggle from "../../components/common/ThemeToggle";
+import NotificationBell from "../../components/common/NotificationBell";
 
 
 const AdminDashboard = () => {
@@ -55,6 +55,7 @@ const AdminDashboard = () => {
         <h2>Admin Dashboard</h2>
         <div>
         <ThemeToggle />
+        <NotificationBell />
         <span> Welcome, {user?.name} </span>
         <button onClick={logout}>Logout</button>
         </div>
@@ -107,25 +108,9 @@ const AdminDashboard = () => {
                   highlight={summary.pendingVerifications > 0}
                 />
               </div>
-
-              <AnalyticsChart
-                title="Daily Donations (last 30 days)"
-                data={daily}
-                labelKey="_id"
-                valueKey="totalListings"
-              />
-              <AnalyticsChart
-                title="Monthly Donations (last 12 months)"
-                data={monthly}
-                labelKey="_id"
-                valueKey="totalListings"
-              />
-              <AnalyticsChart
-                title="Food Category Breakdown"
-                data={categories}
-                labelKey="_id"
-                valueKey="count"
-              />
+                <DailyLineChart data={daily} />
+                <MonthlyBarChart data={monthly} />
+                <CategoryPieChart data={categories} /> 
             </>
           )}
         </div>

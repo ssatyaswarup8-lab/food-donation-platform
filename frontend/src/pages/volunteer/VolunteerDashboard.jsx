@@ -6,6 +6,7 @@ import { getMyDeliveries } from "../../services/delivery.service";
 import DeliveryCard from "../../components/volunteer/DeliveryCard";
 import { SkeletonCard } from "../../components/common/Skeleton";
 import ThemeToggle from "../../components/common/ThemeToggle";
+import NotificationBell from "../../components/common/NotificationBell";
 
 const VolunteerDashboard = () => {
   const { user, logout } = useAuth();
@@ -63,6 +64,7 @@ const VolunteerDashboard = () => {
         <h2>Volunteer Dashboard</h2>
         <div>
   <ThemeToggle />
+  <NotificationBell />
   <span> Welcome, {user?.name} </span>
   <button onClick={logout}>Logout</button>
 </div>

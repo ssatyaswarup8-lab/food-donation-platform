@@ -15,11 +15,13 @@ const certificateRoutes = require("./routes/certificate.routes");
 const leaderboardRoutes = require("./routes/leaderboard.routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
+const notificationRoutes = require("./routes/notification.routes");
 
 const app = express();
 
 app.use(cors({ origin: process.env.CLIENT_URL || "*", credentials: true }));
 app.use("/api/chat", chatRoutes);
+app.use("/api/notifications", notificationRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/certificates", certificateRoutes);

@@ -2,6 +2,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { deleteFood } from "../../services/food.service";
 import ReviewModal from "../common/ReviewModal";
+import ConfirmModal from "../common/ConfirmModal";
+
 
 const statusColors = {
   available: "green",
@@ -15,21 +17,21 @@ const statusColors = {
 const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
   const [deletingId, setDeletingId] = useState(null);
   const [reviewingDeliveryId, setReviewingDeliveryId] = useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this listing?")) return;
-
-    setDeletingId(id);
-    try {
-      await deleteFood(id);
-      toast.success("Listing deleted");
-      onFoodChanged();
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to delete listing");
-    } finally {
-      setDeletingId(null);
-    }
-  };
+ const handleDelete = async (id) => {
+  setDeletingId(id);
+  try {
+    await deleteFood(id);
+    toast.success("Listing deleted");
+    onFoodChanged();
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to delete listing");
+  } finally {
+    setDeletingId(null);
+    setConfirmDeleteId(null);
+  }
+};
 
   if (!foods || foods.length === 0) {
     return <p>You haven't posted any food listings yet.</p>;
@@ -51,12 +53,13 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
           {food.images && food.images.length > 0 && (
   <div style={{ display: "flex", gap: 6, overflowX: "auto", marginBottom: 8 }}>
     {food.images.map((img, idx) => (
-      <img
-        key={idx}
-        src={`${import.meta.env.VITE_SOCKET_URL}${img}`}
-        alt={`${food.foodName} ${idx + 1}`}
-        style={{ width: 100, height: 80, objectFit: "cover", borderRadius: 4 }}
-      />
+     <img
+           key={idx}
+           src={`${import.meta.env.VITE_SOCKET_URL}${img}`}
+          alt={`${food.foodName} ${idx + 1}`}
+          loading="lazy"
+          style={{ width: 100, height: 80, objectFit: "cover", borderRadius: 4 }}
+/>
     ))}
   </div>
 )}
@@ -77,7 +80,7 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
             {food.status === "available" && (
               <div style={{ display: "flex", gap: 8 }}>
                 <button onClick={() => onEdit(food)}>Edit</button>
-                <button onClick={() => handleDelete(food._id)} disabled={deletingId === food._id}>
+                <button onClick={() => setConfirmDeleteId(food._id)} disabled={deletingId === food._id}>
                   {deletingId === food._id ? "Deleting..." : "Delete"}
                 </button>
               </div>
@@ -99,6 +102,15 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
           </div>
         ))}
       </div>
+      {confirmDeleteId && (
+  <ConfirmModal
+    title="Delete Listing?"
+    message="This action cannot be undone."
+    confirmLabel="Delete"
+    onConfirm={() => handleDelete(confirmDeleteId)}
+    onCancel={() => setConfirmDeleteId(null)}
+  />
+)}
     </div>
   );
 };

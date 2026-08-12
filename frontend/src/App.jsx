@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { SocketProvider } from "./context/SocketContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import AppRoutes from "./routes/AppRoutes";
+import Navbar from "./components/common/Navbar";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <SocketProvider>
+            <Navbar />
             <AppRoutes />
             <Toaster
               position="top-right"

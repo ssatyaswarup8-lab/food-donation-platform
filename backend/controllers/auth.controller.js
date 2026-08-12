@@ -195,3 +195,28 @@ exports.resetPassword = async (req, res) => {
     return error(res, 500, err.message);
   }
 };
+
+
+// @desc    Update logged-in user's profile
+// @route   PUT /api/auth/update-profile
+// @access  Private
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, phone, address, organizationName } = req.body;
+
+    const user = await User.findById(req.user.id);
+    if (!user) return error(res, 404, "User not found");
+
+    if (name) user.name = name;
+    if (phone) user.phone = phone;
+    if (address) user.address = address;
+    if (organizationName !== undefined) user.organizationName = organizationName;
+    if (req.file) user.profileImage = `/uploads/${req.file.filename}`;
+
+    await user.save();
+
+    return success(res, 200, "Profile updated successfully", user);
+  } catch (err) {
+    return error(res, 500, err.message);
+  }
+};

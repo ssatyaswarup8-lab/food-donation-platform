@@ -1,10 +1,17 @@
 const { getIO } = require("../config/socket");
+const Notification = require("../models/Notification.model");
 
-// Send event to a specific user's room
-const notifyUser = (userId, event, payload) => {
+const notifyUser = async (userId, event, payload) => {
   try {
     const io = getIO();
     io.to(userId.toString()).emit(event, payload);
+
+    await Notification.create({
+      userId,
+      type: event,
+      message: payload.message || JSON.stringify(payload),
+      link: payload.link || null,
+    });
   } catch (err) {
     console.error("Notification error:", err.message);
   }

@@ -11,6 +11,7 @@ import SpoilagePredictor from "../../components/donor/SpoilagePredictor";
 import DonationHistory from "../../components/donor/DonationHistory";
 import { SkeletonCard } from "../../components/common/Skeleton";
 import ThemeToggle from "../../components/common/ThemeToggle";
+import NotificationBell from "../../components/common/NotificationBell";
 
 const DonorDashboard = () => {
   const { user, logout } = useAuth();
@@ -69,7 +70,10 @@ const DonorDashboard = () => {
         <h2>Donor Dashboard</h2>
         <div>
   <ThemeToggle />
+  <NotificationBell />
   <span> Welcome, {user?.name} </span>
+
+  <Link to="/profile">👤 Profile</Link>
   <button onClick={logout}>Logout</button>
 </div>
       </div>

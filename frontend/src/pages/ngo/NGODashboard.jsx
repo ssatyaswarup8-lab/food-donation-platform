@@ -6,6 +6,8 @@ import { getMyClaims } from "../../services/claim.service";
 import NearbyFoodList from "../../components/ngo/NearbyFoodList";
 import ClaimCard from "../../components/ngo/ClaimCard";
 import ThemeToggle from "../../components/common/ThemeToggle";
+import NotificationBell from "../../components/common/NotificationBell";
+
 
 const NGODashboard = () => {
   const { user, logout } = useAuth();
@@ -55,6 +57,7 @@ const NGODashboard = () => {
         <h2>NGO Dashboard</h2>
         <div>
             <ThemeToggle />
+            <NotificationBell />
             <span> Welcome, {user?.name} </span>
             <button onClick={logout}>Logout</button>
         </div>

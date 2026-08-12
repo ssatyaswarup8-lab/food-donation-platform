@@ -15,6 +15,7 @@ import DeliveryTracking from "../pages/DeliveryTracking";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import Leaderboard from "../pages/Leaderboard";
+import Profile from "../pages/Profile";
 
 const AppRoutes = () => {
   return (
@@ -79,6 +80,15 @@ const AppRoutes = () => {
     </ProtectedRoute>
     }
     />
+
+    <Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>
     </Routes>
   );
 };
