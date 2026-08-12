@@ -27,9 +27,17 @@ exports.registerValidation = [
     .isIn(["donor", "ngo", "volunteer"]).withMessage("Invalid role selected"),
 
   body("donorType")
-    .optional()
-    .isIn(["restaurant", "hotel", "wedding_organizer", "college_canteen", "individual"])
-    .withMessage("Invalid donor type"),
+  .if(body("role").equals("donor"))
+  .notEmpty()
+  .withMessage("Donor type is required")
+  .isIn([
+    "restaurant",
+    "hotel",
+    "wedding_organizer",
+    "college_canteen",
+    "individual"
+  ])
+  .withMessage("Invalid donor type"),
 
   body("address")
     .trim()
