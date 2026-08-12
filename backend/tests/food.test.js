@@ -2,6 +2,15 @@ require("./setup");
 process.env.JWT_SECRET = "test_secret";
 process.env.JWT_EXPIRE = "1d";
 
+jest.mock("../services/notificationEmail.service", () => ({
+  sendVerificationEmail: jest.fn((to, name, otp) => {
+    global.__lastOTP = otp;
+    return Promise.resolve(true);
+  }),
+  sendOTPEmail: jest.fn(() => Promise.resolve(true)),
+  sendFoodClaimedEmail: jest.fn(() => Promise.resolve(true)),
+}));
+
 const request = require("supertest");
 const app = require("../app");
 
@@ -9,7 +18,7 @@ describe("Food Endpoints", () => {
   let donorToken;
 
   beforeEach(async () => {
-    const res = await request(app).post("/api/auth/register").send({
+    const donorData = {
       name: "Test Hotel",
       email: "hotel@test.com",
       password: "password123",
@@ -19,9 +28,19 @@ describe("Food Endpoints", () => {
       address: "Test Address",
       longitude: 85.8,
       latitude: 20.3,
-    });
-    donorToken = res.body.data.token;
+    };
+
+    await request(app).post("/api/auth/register").send(donorData);
+    const otp = global.__lastOTP;
+
+    const verifyRes = await request(app)
+      .post("/api/auth/verify-email")
+      .send({ email: donorData.email, otp });
+
+    donorToken = verifyRes.body.data.token;
   });
+
+  // ...rest of the file (the individual test() blocks) stays exactly the same
 
   test("should reject food creation without auth token", async () => {
     const res = await request(app).post("/api/foods").send({ foodName: "Rice" });
