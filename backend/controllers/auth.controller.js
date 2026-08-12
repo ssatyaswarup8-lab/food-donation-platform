@@ -1,11 +1,18 @@
+const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User.model");
 const generateToken = require("../utils/generateToken");
 const { success, error } = require("../utils/apiResponse");
-const crypto = require("crypto");
-const bcrypt = require("bcryptjs");
-const { sendOTPEmail } = require("../services/notificationEmail.service");
+const { sendOTPEmail, sendVerificationEmail } = require("../services/notificationEmail.service");
 
-// @desc    Register new user (donor/ngo/volunteer)
+// Helper: generate a 6-digit OTP and its hashed version
+const generateOTP = async () => {
+  const otp = crypto.randomInt(100000, 999999).toString();
+  const hashedOTP = await bcrypt.hash(otp, 10);
+  return { otp, hashedOTP };
+};
+
+// @desc    Register new user (donor/ngo/volunteer) — sends email verification OTP
 // @route   POST /api/auth/register
 // @access  Public
 exports.registerUser = async (req, res) => {
@@ -36,39 +43,123 @@ exports.registerUser = async (req, res) => {
       return error(res, 400, "User already exists with this email");
     }
 
-   const userData = {
-  name,
-  email,
-  password,
-  phone,
-  role,
-  organizationName,
-  address,
-  location: {
-    type: "Point",
-    coordinates: [longitude || 0, latitude || 0],
-  },
-  isVerified: role === "volunteer",
+    const { otp, hashedOTP } = await generateOTP();
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+      phone,
+      role,
+      donorType,
+      organizationName,
+      address,
+      location: {
+        type: "Point",
+        coordinates: [longitude || 0, latitude || 0],
+      },
+      isVerified: role === "volunteer",
+      isEmailVerified: false,
+      emailVerificationOTP: hashedOTP,
+      emailVerificationOTPExpires: Date.now() + 10 * 60 * 1000, // 10 minutes
+    });
+
+    await sendVerificationEmail(user.email, user.name, otp);
+
+    // No token issued yet — user must verify email before logging in
+    return success(res, 201, "Registration successful. Please check your email for the verification code.", {
+      email: user.email,
+      requiresVerification: true,
+    });
+  } catch (err) {
+    return error(res, 500, err.message);
+  }
 };
 
-if (role === "donor" && donorType) {
-  userData.donorType = donorType;
-}
+// @desc    Verify email using OTP sent at registration
+// @route   POST /api/auth/verify-email
+// @access  Public
+exports.verifyEmail = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
 
-const user = await User.create(userData);
+    if (!email || !otp) {
+      return error(res, 400, "Email and OTP are required");
+    }
+
+    const user = await User.findOne({ email }).select(
+      "+emailVerificationOTP +emailVerificationOTPExpires"
+    );
+
+    if (!user) {
+      return error(res, 404, "User not found");
+    }
+
+    if (user.isEmailVerified) {
+      return error(res, 400, "Email is already verified");
+    }
+
+    if (!user.emailVerificationOTP || !user.emailVerificationOTPExpires) {
+      return error(res, 400, "No verification pending. Please request a new OTP.");
+    }
+
+    if (Date.now() > user.emailVerificationOTPExpires) {
+      return error(res, 400, "OTP has expired. Please request a new one.");
+    }
+
+    const isMatch = await bcrypt.compare(otp, user.emailVerificationOTP);
+    if (!isMatch) {
+      return error(res, 400, "Invalid OTP");
+    }
+
+    user.isEmailVerified = true;
+    user.emailVerificationOTP = undefined;
+    user.emailVerificationOTPExpires = undefined;
+    await user.save();
 
     const token = generateToken(user._id, user.role);
 
-    return success(res, 201, "User registered successfully", {
+    return success(res, 200, "Email verified successfully!", {
       _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
       isVerified: user.isVerified,
+      isEmailVerified: user.isEmailVerified,
       token,
     });
   } catch (err) {
-    console.log(err);
+    return error(res, 500, err.message);
+  }
+};
+
+// @desc    Resend email verification OTP
+// @route   POST /api/auth/resend-verification
+// @access  Public
+exports.resendVerificationOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return error(res, 400, "Email is required");
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return error(res, 404, "User not found");
+    }
+
+    if (user.isEmailVerified) {
+      return error(res, 400, "Email is already verified");
+    }
+
+    const { otp, hashedOTP } = await generateOTP();
+
+    user.emailVerificationOTP = hashedOTP;
+    user.emailVerificationOTPExpires = Date.now() + 10 * 60 * 1000;
+    await user.save();
+
+    await sendVerificationEmail(user.email, user.name, otp);
+
+    return success(res, 200, "Verification OTP resent. Please check your email.");
+  } catch (err) {
     return error(res, 500, err.message);
   }
 };
@@ -98,6 +189,15 @@ exports.loginUser = async (req, res) => {
       return error(res, 403, "Account has been deactivated. Contact admin.");
     }
 
+    if (!user.isEmailVerified) {
+      return res.status(403).json({
+        success: false,
+        message: "Please verify your email before logging in.",
+        requiresVerification: true,
+        email: user.email,
+      });
+    }
+
     const token = generateToken(user._id, user.role);
 
     return success(res, 200, "Login successful", {
@@ -106,6 +206,7 @@ exports.loginUser = async (req, res) => {
       email: user.email,
       role: user.role,
       isVerified: user.isVerified,
+      isEmailVerified: user.isEmailVerified,
       token,
     });
   } catch (err) {
@@ -126,6 +227,30 @@ exports.getMe = async (req, res) => {
   }
 };
 
+// @desc    Update logged-in user's profile
+// @route   PUT /api/auth/update-profile
+// @access  Private
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, phone, address, organizationName } = req.body;
+
+    const user = await User.findById(req.user.id);
+    if (!user) return error(res, 404, "User not found");
+
+    if (name) user.name = name;
+    if (phone) user.phone = phone;
+    if (address) user.address = address;
+    if (organizationName !== undefined) user.organizationName = organizationName;
+    if (req.file) user.profileImage = `/uploads/${req.file.filename}`;
+
+    await user.save();
+
+    return success(res, 200, "Profile updated successfully", user);
+  } catch (err) {
+    return error(res, 500, err.message);
+  }
+};
+
 // @desc    Request password reset — sends OTP to email
 // @route   POST /api/auth/forgot-password
 // @access  Public
@@ -136,15 +261,13 @@ exports.forgotPassword = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      // Don't reveal whether the email exists — generic response
       return success(res, 200, "If that email exists, an OTP has been sent");
     }
 
-    const otp = crypto.randomInt(100000, 999999).toString();
-    const hashedOTP = await bcrypt.hash(otp, 10);
+    const { otp, hashedOTP } = await generateOTP();
 
     user.resetOTP = hashedOTP;
-    user.resetOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    user.resetOTPExpires = Date.now() + 10 * 60 * 1000;
     await user.save();
 
     await sendOTPEmail(user.email, user.name, otp);
@@ -185,37 +308,12 @@ exports.resetPassword = async (req, res) => {
       return error(res, 400, "Invalid OTP");
     }
 
-    user.password = newPassword; // will be hashed by pre-save hook
+    user.password = newPassword;
     user.resetOTP = undefined;
     user.resetOTPExpires = undefined;
     await user.save();
 
     return success(res, 200, "Password reset successfully. Please log in.");
-  } catch (err) {
-    return error(res, 500, err.message);
-  }
-};
-
-
-// @desc    Update logged-in user's profile
-// @route   PUT /api/auth/update-profile
-// @access  Private
-exports.updateProfile = async (req, res) => {
-  try {
-    const { name, phone, address, organizationName } = req.body;
-
-    const user = await User.findById(req.user.id);
-    if (!user) return error(res, 404, "User not found");
-
-    if (name) user.name = name;
-    if (phone) user.phone = phone;
-    if (address) user.address = address;
-    if (organizationName !== undefined) user.organizationName = organizationName;
-    if (req.file) user.profileImage = `/uploads/${req.file.filename}`;
-
-    await user.save();
-
-    return success(res, 200, "Profile updated successfully", user);
   } catch (err) {
     return error(res, 500, err.message);
   }

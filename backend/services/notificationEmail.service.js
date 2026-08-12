@@ -10,6 +10,16 @@ const otpEmailTemplate = (name, otp) => `
   </div>
 `;
 
+const verificationEmailTemplate = (name, otp) => `
+  <div style="font-family: sans-serif; max-width: 500px; margin: auto;">
+    <h2 style="color: #2e7d32;">Verify Your Email</h2>
+    <p>Hi ${name},</p>
+    <p>Welcome to the Food Donation Platform! Please verify your email using the code below:</p>
+    <h1 style="letter-spacing: 4px; color: #ff8f00;">${otp}</h1>
+    <p>This code expires in 10 minutes. Enter it on the verification page to activate your account.</p>
+  </div>
+`;
+
 const foodClaimedEmailTemplate = (donorName, foodName, claimedBy) => `
   <div style="font-family: sans-serif; max-width: 500px; margin: auto;">
     <h2 style="color: #2e7d32;">Your Food Was Claimed!</h2>
@@ -26,6 +36,14 @@ const sendOTPEmail = async (to, name, otp) => {
   });
 };
 
+const sendVerificationEmail = async (to, name, otp) => {
+  return sendEmail({
+    to,
+    subject: "Verify your email — Food Donation Platform",
+    html: verificationEmailTemplate(name, otp),
+  });
+};
+
 const sendFoodClaimedEmail = async (to, donorName, foodName, claimedBy) => {
   return sendEmail({
     to,
@@ -34,4 +52,4 @@ const sendFoodClaimedEmail = async (to, donorName, foodName, claimedBy) => {
   });
 };
 
-module.exports = { sendOTPEmail, sendFoodClaimedEmail };
+module.exports = { sendOTPEmail, sendFoodClaimedEmail, sendVerificationEmail };

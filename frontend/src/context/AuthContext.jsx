@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { loginUser, registerUser, getMyProfile } from "../services/auth.service";
+import { loginUser, registerUser } from "../services/auth.service";
 
 export const AuthContext = createContext();
 
@@ -31,15 +31,17 @@ export const AuthProvider = ({ children }) => {
     return userData;
   };
 
+  // Registration only creates the account and sends an OTP — it does NOT log the user in.
+  // Login only happens after verify-email succeeds (handled separately in VerifyEmail.jsx).
   const register = async (formData) => {
     const res = await registerUser(formData);
-    const userData = res.data;
+    return res.data; // { email, requiresVerification }
+  };
 
+  const setSession = (userData) => {
     localStorage.setItem("token", userData.token);
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-
-    return userData;
   };
 
   const logout = () => {
@@ -49,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, setSession, logout }}>
       {children}
     </AuthContext.Provider>
   );

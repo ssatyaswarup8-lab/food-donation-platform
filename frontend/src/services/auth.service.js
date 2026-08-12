@@ -5,6 +5,16 @@ export const registerUser = async (data) => {
   return res.data;
 };
 
+export const verifyEmail = async (data) => {
+  const res = await api.post("/auth/verify-email", data);
+  return res.data;
+};
+
+export const resendVerificationOTP = async (email) => {
+  const res = await api.post("/auth/resend-verification", { email });
+  return res.data;
+};
+
 export const loginUser = async (data) => {
   const res = await api.post("/auth/login", data);
   return res.data;
@@ -15,6 +25,13 @@ export const getMyProfile = async () => {
   return res.data;
 };
 
+export const updateProfile = async (formData) => {
+  const res = await api.put("/auth/update-profile", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
 export const forgotPassword = async (email) => {
   const res = await api.post("/auth/forgot-password", { email });
   return res.data;
@@ -22,12 +39,5 @@ export const forgotPassword = async (email) => {
 
 export const resetPassword = async (data) => {
   const res = await api.post("/auth/reset-password", data);
-  return res.data;
-};
-
-export const updateProfile = async (formData) => {
-  const res = await api.put("/auth/update-profile", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
   return res.data;
 };

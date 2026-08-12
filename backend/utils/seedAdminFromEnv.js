@@ -23,6 +23,7 @@ const seedAdminFromEnv = async () => {
         phone: ADMIN_PHONE || "0000000000",
         role: "admin",
         isVerified: true,
+        isEmailVerified: true,
       });
       console.log(`✅ Admin account created: ${admin.email}`);
       return;
