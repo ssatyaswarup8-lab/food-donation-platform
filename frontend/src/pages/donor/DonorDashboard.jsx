@@ -7,7 +7,7 @@ import { getMyFoods } from "../../services/food.service";
 import FoodPostForm from "../../components/donor/FoodPostForm";
 import DonorFoodList from "../../components/donor/DonorFoodList";
 import EditFoodModal from "../../components/donor/EditFoodModal";
-import SpoilagePredictor from "../../components/donor/SpoilagePredictor";
+import SpoilagePredictor from "../../components/donor/spoilagePredictor";
 import DonationHistory from "../../components/donor/DonationHistory";
 import { SkeletonCard } from "../../components/common/Skeleton";
 import ThemeToggle from "../../components/common/ThemeToggle";
