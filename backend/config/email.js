@@ -12,6 +12,8 @@ const transporter = nodemailer.createTransport({
 transporter.verify((err, success) => {
   if (err) {
     console.error("❌ Email service NOT configured correctly:", err.message);
+    console.log("EMAIL_USER:", process.env.EMAIL_USER);
+    console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
   } else {
     console.log("✅ Email service ready to send messages");
   }
