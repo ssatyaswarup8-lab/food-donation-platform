@@ -63,7 +63,8 @@ const user = await User.create({
   emailVerificationOTPExpires: Date.now() + 10 * 60 * 1000,
 });
 
-    await sendVerificationEmail(user.email, user.name, otp);
+    const emailSent = await sendVerificationEmail(user.email, user.name, otp);
+    console.log(`📧 [DEV MODE] OTP for ${user.email}: ${otp} | Email sent: ${emailSent}`);
 
     // No token issued yet — user must verify email before logging in
     return success(res, 201, "Registration successful. Please check your email for the verification code.", {
@@ -155,7 +156,8 @@ exports.resendVerificationOTP = async (req, res) => {
     user.emailVerificationOTPExpires = Date.now() + 10 * 60 * 1000;
     await user.save();
 
-    await sendVerificationEmail(user.email, user.name, otp);
+    const emailSent = await sendVerificationEmail(user.email, user.name, otp);
+    console.log(`📧 [DEV MODE] OTP for ${user.email}: ${otp} | Email sent: ${emailSent}`);
 
     return success(res, 200, "Verification OTP resent. Please check your email.");
   } catch (err) {
