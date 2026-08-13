@@ -44,25 +44,24 @@ exports.registerUser = async (req, res) => {
     }
 
     const { otp, hashedOTP } = await generateOTP();
-
-    const user = await User.create({
-      name,
-      email,
-      password,
-      phone,
-      role,
-      donorType,
-      organizationName,
-      address,
-      location: {
-        type: "Point",
-        coordinates: [longitude || 0, latitude || 0],
-      },
-      isVerified: role === "volunteer",
-      isEmailVerified: false,
-      emailVerificationOTP: hashedOTP,
-      emailVerificationOTPExpires: Date.now() + 10 * 60 * 1000, // 10 minutes
-    });
+const user = await User.create({
+  name,
+  email,
+  password,
+  phone,
+  role,
+  donorType: role === "donor" && donorType ? donorType : undefined,
+  organizationName,
+  address,
+  location: {
+    type: "Point",
+    coordinates: [longitude || 0, latitude || 0],
+  },
+  isVerified: role === "volunteer",
+  isEmailVerified: false,
+  emailVerificationOTP: hashedOTP,
+  emailVerificationOTPExpires: Date.now() + 10 * 60 * 1000,
+});
 
     await sendVerificationEmail(user.email, user.name, otp);
 
