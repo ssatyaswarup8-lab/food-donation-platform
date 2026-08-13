@@ -72,6 +72,7 @@ const user = await User.create({
       requiresVerification: true,
     });
   } catch (err) {
+    console.log(err);
     return error(res, 500, err.message);
   }
 };
