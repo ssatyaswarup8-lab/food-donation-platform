@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
         default: "Point",
       },
       coordinates: {
-        type: [Number], // [longitude, latitude]
+        type: [Number],
         default: [0, 0],
       },
     },
@@ -68,18 +68,6 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
     resetOTPExpires: {
-      type: Date,
-      select: false,
-    },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    emailVerificationOTP: {
-      type: String,
-      select: false,
-    },
-    emailVerificationOTPExpires: {
       type: Date,
       select: false,
     },

@@ -5,8 +5,6 @@ const {
   registerUser,
   loginUser,
   getMe,
-  verifyEmail,
-  resendVerificationOTP,
   forgotPassword,
   resetPassword,
   updateProfile,
@@ -19,8 +17,6 @@ const validate = require("../middlewares/validate.middleware");
 const { authLimiter } = require("../middlewares/rateLimiter.middleware");
 
 router.post("/register", authLimiter, registerValidation, validate, registerUser);
-router.post("/verify-email", authLimiter, verifyEmail);
-router.post("/resend-verification", authLimiter, resendVerificationOTP);
 router.post("/login", authLimiter, loginValidation, validate, loginUser);
 router.post("/forgot-password", authLimiter, forgotPassword);
 router.post("/reset-password", authLimiter, resetPassword);

@@ -46,9 +46,9 @@ const Register = () => {
       const coords = await getLocation();
       const payload = { ...formData, ...coords };
 
-      const result = await register(payload);
-      toast.success("Registered! Check your email for the verification code.");
-      navigate("/verify-email", { state: { email: result.email } });
+      const userData = await register(payload);
+      toast.success(`Welcome, ${userData.name}! Registration successful.`);
+      redirectByRole(userData.role);
     } catch (err) {
       const msg = err.response?.data?.message || "Registration failed";
       setError(msg);
@@ -56,6 +56,13 @@ const Register = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const redirectByRole = (role) => {
+    if (role === "donor") navigate("/donor/dashboard");
+    else if (role === "ngo") navigate("/ngo/dashboard");
+    else if (role === "volunteer") navigate("/volunteer/dashboard");
+    else navigate("/");
   };
 
   return (

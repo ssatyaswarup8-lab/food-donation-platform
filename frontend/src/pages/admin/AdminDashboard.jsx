@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import DashboardHeader from "../../components/common/DashboardHeader";
+import StatBadge from "../../components/common/StatBadge";
 import {
   getAnalyticsSummary,
   getDailyDonations,
@@ -51,15 +53,16 @@ const AdminDashboard = () => {
 
   return (
     <div style={{ padding: 20, maxWidth: 900, margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h2>Admin Dashboard</h2>
-        <div>
-        <ThemeToggle />
-        <NotificationBell />
-        <span> Welcome, {user?.name} </span>
-        <button onClick={logout}>Logout</button>
-        </div>
-      </div>
+      <DashboardHeader
+  icon="🛡️"
+  title={`Welcome, ${user?.name}`}
+  subtitle="Verify users, monitor deliveries, and track platform impact"
+  gradient="linear-gradient(135deg, #6a1b9a, #4a148c)"
+/>
+
+<div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+  <button onClick={logout}>Logout</button>
+</div>
 
       <div style={{ marginBottom: 16 }}>
         <button onClick={() => setActiveTab("overview")} disabled={activeTab === "overview"}>
@@ -88,26 +91,15 @@ const AdminDashboard = () => {
             <p>Loading analytics...</p>
           ) : (
             <>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: 10,
-                  marginBottom: 20,
-                }}
-              >
-                <SummaryCard label="Food Listings Posted" value={summary.totalFoodListingsPosted} />
-                <SummaryCard label="Meals Distributed" value={summary.totalMealsDistributed} />
-                <SummaryCard label="Active NGOs" value={summary.activeNGOs} />
-                <SummaryCard label="Active Volunteers" value={summary.activeVolunteers} />
-                <SummaryCard label="Active Donors" value={summary.activeDonors} />
-                <SummaryCard label="Deliveries Completed" value={summary.totalDeliveriesCompleted} />
-                <SummaryCard
-                  label="Pending Verifications"
-                  value={summary.pendingVerifications}
-                  highlight={summary.pendingVerifications > 0}
-                />
-              </div>
+             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 24 }}>
+  <StatBadge icon="🍲" label="Food Listings Posted" value={summary.totalFoodListingsPosted} />
+  <StatBadge icon="🍛" label="Meals Distributed" value={summary.totalMealsDistributed} color="var(--accent-orange)" />
+  <StatBadge icon="🏠" label="Active NGOs" value={summary.activeNGOs} />
+  <StatBadge icon="🛵" label="Active Volunteers" value={summary.activeVolunteers} color="var(--accent-orange)" />
+  <StatBadge icon="🏨" label="Active Donors" value={summary.activeDonors} />
+  <StatBadge icon="✅" label="Deliveries Completed" value={summary.totalDeliveriesCompleted} />
+  <StatBadge icon="⏳" label="Pending Verifications" value={summary.pendingVerifications} color={summary.pendingVerifications > 0 ? "var(--danger)" : "var(--primary-green)"} />
+</div>
                 <DailyLineChart data={daily} />
                 <MonthlyBarChart data={monthly} />
                 <CategoryPieChart data={categories} /> 

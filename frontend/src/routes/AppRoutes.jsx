@@ -16,7 +16,6 @@ import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import Leaderboard from "../pages/Leaderboard";
 import Profile from "../pages/Profile";
-import VerifyEmail from "../pages/auth/VerifyEmail";
 
 const AppRoutes = () => {
   return (
@@ -25,10 +24,8 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="/verify-email" element={<VerifyEmail />} />
-     
-
-      <Route
+      
+        <Route
         path="/donor/dashboard"
         element={
           <ProtectedRoute allowedRoles={["donor"]}>

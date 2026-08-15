@@ -12,6 +12,8 @@ import DonationHistory from "../../components/donor/DonationHistory";
 import { SkeletonCard } from "../../components/common/Skeleton";
 import ThemeToggle from "../../components/common/ThemeToggle";
 import NotificationBell from "../../components/common/NotificationBell";
+import DashboardHeader from "../../components/common/DashboardHeader";
+import { staggerStyle } from "../../utils/stagger";
 
 const DonorDashboard = () => {
   const { user, logout } = useAuth();
@@ -66,26 +68,34 @@ const DonorDashboard = () => {
 
   return (
     <div style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h2>Donor Dashboard</h2>
-        <div>
-  <ThemeToggle />
-  <NotificationBell />
-  <span> Welcome, {user?.name} </span>
+          
+    <DashboardHeader
+      icon="🍲"
+      title={`Welcome, ${user?.name}`}
+      subtitle="Post surplus food and track your donations' impact"
+      gradient="linear-gradient(135deg, #2e7d32, #1b5e20)"
+    />
 
-  <Link to="/profile">👤 Profile</Link>
-  <button onClick={logout}>Logout</button>
-</div>
-      </div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "flex-end",
+        gap: 8,
+        marginBottom: 10,
+      }}
+    >
+      
+      <NotificationBell />
+      <ThemeToggle />
+     
+    </div>
 
-      <Link to="/leaderboard">🏆 View Leaderboard</Link>
-
-      {!user?.isVerified && (
-        <p style={{ color: "orange" }}>
-          Your account is pending admin verification. You can still post food, but visibility to
-          NGOs may be limited until verified.
-        </p>
-      )}
+    {!user?.isVerified && (
+      <p style={{ color: "orange" }}>
+        Your account is pending admin verification. You can still post food,
+        but visibility to NGOs may be limited until verified.
+      </p>
+    )}
 
       <SpoilagePredictor />
 

@@ -4,11 +4,12 @@ import toast from "react-hot-toast";
 import { SkeletonCard } from "../common/Skeleton";
 import RatingBadge from "../common/RatingBadge";
 import { useDebounce } from "../../hooks/useDebounce";
+import EmptyState from "../common/EmptyState";
 
 const NearbyFoodList = ({ foods, onClaimed, loading }) => {
   const [claimingId, setClaimingId] = useState(null);
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 300); 
+  const debouncedSearch = useDebounce(search, 300);  
   const [foodTypeFilter, setFoodTypeFilter] = useState("");
   const [sortBy, setSortBy] = useState("distance");
 
@@ -64,6 +65,16 @@ const NearbyFoodList = ({ foods, onClaimed, loading }) => {
         <SkeletonCard />
         <SkeletonCard />
       </div>
+    );
+  }
+
+  if (!foods || foods.length === 0) {
+    return (
+      <EmptyState
+        icon="🍽️"
+        title="No food nearby right now"
+        subtitle="Try increasing your search radius, or check back soon — new listings appear in real time."
+      />
     );
   }
 

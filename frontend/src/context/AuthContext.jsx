@@ -31,17 +31,15 @@ export const AuthProvider = ({ children }) => {
     return userData;
   };
 
-  // Registration only creates the account and sends an OTP — it does NOT log the user in.
-  // Login only happens after verify-email succeeds (handled separately in VerifyEmail.jsx).
   const register = async (formData) => {
     const res = await registerUser(formData);
-    return res.data; // { email, requiresVerification }
-  };
+    const userData = res.data;
 
-  const setSession = (userData) => {
     localStorage.setItem("token", userData.token);
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
+
+    return userData;
   };
 
   const logout = () => {
@@ -51,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, setSession, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

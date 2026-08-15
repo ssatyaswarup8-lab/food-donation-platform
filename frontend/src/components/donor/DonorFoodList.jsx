@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { deleteFood } from "../../services/food.service";
 import ReviewModal from "../common/ReviewModal";
 import ConfirmModal from "../common/ConfirmModal";
-
+import EmptyState from "../common/EmptyState";
 
 const statusColors = {
   available: "green",
@@ -13,6 +13,10 @@ const statusColors = {
   completed: "gray",
   expired: "red",
 };
+
+const staggerStyle = (index) => ({
+  animationDelay: `${index * 100}ms`,
+});
 
 const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
   const [deletingId, setDeletingId] = useState(null);
@@ -33,16 +37,27 @@ const DonorFoodList = ({ foods, onFoodChanged, onEdit }) => {
   }
 };
 
-  if (!foods || foods.length === 0) {
-    return <p>You haven't posted any food listings yet.</p>;
-  }
 
+// ...
+if (!foods || foods.length === 0) {
+  return (
+    <EmptyState
+      icon="🍲"
+      title="No listings yet"
+      subtitle="Post your first surplus food above and start making an impact today."
+    />
+  );
+}
   return (
     <div>
       <h3>My Food Listings</h3>
       <div style={{ display: "grid", gap: 12 }}>
-        {foods.map((food) => (
-          <div key={food._id} style={{ border: "1px solid #ddd", padding: 12, borderRadius: 6 }}>
+        {foods.map((food, idx) => (
+  <div
+    key={food._id}
+    className="card stagger-item"
+    style={staggerStyle(idx)}
+  > 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h4>{food.foodName}</h4>
               <span style={{ color: statusColors[food.status] || "black", fontWeight: "bold" }}>

@@ -25,15 +25,7 @@ const Login = () => {
       toast.success(`Welcome back, ${userData.name}!`);
       redirectByRole(userData.role);
     } catch (err) {
-      const data = err.response?.data;
-
-      if (data?.requiresVerification) {
-        toast.error("Please verify your email first");
-        navigate("/verify-email", { state: { email: data.email } });
-        return;
-      }
-
-      const msg = data?.message || "Login failed";
+      const msg = err.response?.data?.message || "Login failed";
       setError(msg);
       toast.error(msg);
     } finally {

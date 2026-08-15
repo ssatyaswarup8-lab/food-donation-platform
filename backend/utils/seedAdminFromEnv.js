@@ -1,9 +1,5 @@
 const User = require("../models/User.model");
 
-// Runs automatically on server startup.
-// Creates the single admin account from .env if it doesn't exist yet.
-// If it already exists, syncs its password to whatever is currently in .env
-// (so you can change ADMIN_PASSWORD in .env and restart to update it).
 const seedAdminFromEnv = async () => {
   try {
     const { ADMIN_NAME, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_PHONE } = process.env;
@@ -23,13 +19,11 @@ const seedAdminFromEnv = async () => {
         phone: ADMIN_PHONE || "0000000000",
         role: "admin",
         isVerified: true,
-        isEmailVerified: true,
       });
       console.log(`✅ Admin account created: ${admin.email}`);
       return;
     }
 
-    // Admin already exists — keep email/password in sync with .env
     let updated = false;
 
     if (admin.email !== ADMIN_EMAIL) {
@@ -37,8 +31,6 @@ const seedAdminFromEnv = async () => {
       updated = true;
     }
 
-    // Always reset password to match .env on every server start
-    // (lets you change ADMIN_PASSWORD in .env and restart to apply it)
     admin.password = ADMIN_PASSWORD;
     updated = true;
 

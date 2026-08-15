@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
 import { updateProfile } from "../services/auth.service";
+import DashboardHeader from "../components/common/DashboardHeader";
 
 const Profile = () => {
   const { user, setUserManually } = useAuth();
@@ -38,17 +39,40 @@ const Profile = () => {
   };
 
   return (
-    <div style={{ maxWidth: 480, margin: "30px auto", padding: 20 }}>
-      <h2>My Profile</h2>
+   <div style={{ maxWidth: 480, margin: "30px auto", padding: 20 }}>
+  <DashboardHeader
+    icon="👤"
+    title="My Profile"
+    subtitle="Keep your details up to date"
+    gradient="linear-gradient(135deg, #2e7d32, #ff8f00)"
+  />
 
-      <div className="card">
-        {user?.profileImage && (
-          <img
-            src={`${import.meta.env.VITE_SOCKET_URL}${user.profileImage}`}
-            alt="Profile"
-            style={{ width: 90, height: 90, borderRadius: "50%", objectFit: "cover", marginBottom: 10 }}
-          />
-        )}
+  <div className="card">
+    {user?.profileImage ? (
+      <img
+        src={`${import.meta.env.VITE_SOCKET_URL}${user.profileImage}`}
+        alt="Profile"
+        className="avatar-glow"
+        style={{ width: 90, height: 90, borderRadius: "50%", objectFit: "cover", marginBottom: 10, border: "3px solid var(--primary-green)" }}
+      />
+    ) : (
+      <div
+        className="avatar-glow"
+        style={{
+          width: 90,
+          height: 90,
+          borderRadius: "50%",
+          background: "var(--primary-green-light)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 32,
+          marginBottom: 10,
+        }}
+      >
+        {user?.name?.charAt(0).toUpperCase()}
+      </div>
+    )}
 
         <form onSubmit={handleSubmit}>
           <label>Full Name</label>

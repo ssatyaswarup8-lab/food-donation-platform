@@ -7,6 +7,7 @@ import NearbyFoodList from "../../components/ngo/NearbyFoodList";
 import ClaimCard from "../../components/ngo/Claimcard";
 import ThemeToggle from "../../components/common/ThemeToggle";
 import NotificationBell from "../../components/common/NotificationBell";
+import DashboardHeader from "../../components/common/DashboardHeader";
 
 
 const NGODashboard = () => {
@@ -53,17 +54,17 @@ const NGODashboard = () => {
 
   return (
     <div style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h2>NGO Dashboard</h2>
-        <div>
-            <ThemeToggle />
-            <NotificationBell />
-            <span> Welcome, {user?.name} </span>
-            <button onClick={logout}>Logout</button>
-        </div>
-      </div>
+      <DashboardHeader
+  icon="🤝"
+  title={`Welcome, ${user?.name}`}
+  subtitle="Browse nearby surplus food and claim what your community needs"
+  gradient="linear-gradient(135deg, #1565c0, #0d47a1)"
+/>
 
-      <Link to="/leaderboard">🏆 View Leaderboard</Link>
+<div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 10 }}>
+  
+</div>
+
 
       {!user?.isVerified && (
         <p style={{ color: "orange" }}>
