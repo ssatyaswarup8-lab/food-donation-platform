@@ -1,0 +1,276 @@
+/* =========================================================
+   SHAREPLATE — UNAUTHORIZED PAGE
+   ========================================================= */
+
+.unauthorized-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(128, 158, 130, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(183, 199, 175, 0.18),
+      transparent 28%
+    ),
+    #f5f8f3;
+  color: #28372e;
+}
+
+/* =========================================================
+   BACKGROUND DECORATION
+   ========================================================= */
+
+.unauthorized-decoration {
+  position: absolute;
+  border: 1px solid rgba(79, 108, 84, 0.09);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.decoration-one {
+  width: 520px;
+  height: 520px;
+  top: -260px;
+  left: -180px;
+}
+
+.decoration-two {
+  width: 620px;
+  height: 620px;
+  right: -300px;
+  bottom: -320px;
+}
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.unauthorized-card {
+  position: relative;
+  z-index: 2;
+  width: min(530px, 100%);
+  padding: 50px 45px 35px;
+  box-sizing: border-box;
+  border: 1px solid #dfe7dc;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.94);
+  text-align: center;
+  box-shadow:
+    0 30px 80px rgba(43, 64, 47, 0.08),
+    0 4px 15px rgba(43, 64, 47, 0.03);
+}
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.unauthorized-icon-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 25px;
+}
+
+.unauthorized-icon {
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 26px;
+  background: #e8f0e5;
+  color: #617f67;
+}
+
+.lock-badge {
+  position: absolute;
+  right: -5px;
+  bottom: -3px;
+  width: 31px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #57775e;
+  color: #fff;
+}
+
+/* =========================================================
+   ERROR CODE
+   ========================================================= */
+
+.unauthorized-code {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #77907c;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.17em;
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.unauthorized-card h1 {
+  margin: 0;
+  color: #26362c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(45px, 7vw, 62px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.unauthorized-card h1 span {
+  color: #69866f;
+  font-style: italic;
+}
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.unauthorized-message {
+  max-width: 400px;
+  margin: 23px auto 0;
+  color: #818b84;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.unauthorized-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.back-button,
+.home-button {
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 17px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.back-button {
+  border: 1px solid #dce4da;
+  background: #fff;
+  color: #617067;
+}
+
+.back-button:hover {
+  border-color: #bccbbd;
+  background: #f7faf6;
+  transform: translateY(-1px);
+}
+
+.home-button {
+  border: 1px solid #57775e;
+  background: #57775e;
+  color: #fff;
+  box-shadow: 0 7px 18px rgba(72, 104, 78, 0.17);
+}
+
+.home-button:hover {
+  background: #496b50;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.unauthorized-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 1px solid #edf0eb;
+  color: #9aa29c;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.unauthorized-footer svg {
+  flex-shrink: 0;
+  color: #79927d;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 520px) {
+  .unauthorized-page {
+    padding: 20px 14px;
+  }
+
+  .unauthorized-card {
+    padding: 38px 22px 27px;
+    border-radius: 20px;
+  }
+
+  .unauthorized-icon-wrapper,
+  .unauthorized-icon {
+    width: 78px;
+    height: 78px;
+  }
+
+  .unauthorized-icon {
+    border-radius: 22px;
+  }
+
+  .unauthorized-card h1 {
+    font-size: 47px;
+  }
+
+  .unauthorized-message {
+    font-size: 12px;
+  }
+
+  .unauthorized-actions {
+    flex-direction: column;
+  }
+
+  .back-button,
+  .home-button {
+    width: 100%;
+  }
+
+  .unauthorized-footer {
+    align-items: flex-start;
+    text-align: left;
+  }
+}

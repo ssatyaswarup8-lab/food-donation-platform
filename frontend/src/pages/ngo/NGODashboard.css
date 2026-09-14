@@ -1,0 +1,1191 @@
+/* =========================================================
+   SHAREPLATE — NGO DASHBOARD
+   ========================================================= */
+
+.ngo-dashboard {
+  position: relative;
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+  background: #f5f8f3;
+  color: #29372f;
+}
+
+.ngo-dashboard-bg {
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 86% 5%,
+      rgba(137, 166, 139, 0.14),
+      transparent 29%
+    ),
+    radial-gradient(
+      circle at 4% 58%,
+      rgba(184, 202, 179, 0.12),
+      transparent 26%
+    );
+}
+
+.ngo-dashboard-shell {
+  position: relative;
+  z-index: 2;
+
+  width: min(1240px, calc(100% - 48px));
+
+  margin: 0 auto;
+
+  padding: 25px 0 45px;
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.ngo-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #e1e8df;
+}
+
+.ngo-topbar-brand {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.ngo-brand-mark {
+  width: 37px;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #dce8da;
+
+  color: #5d7c64;
+}
+
+.ngo-brand-name {
+  display: block;
+
+  color: #34453a;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 19px;
+
+  font-weight: 600;
+}
+
+.ngo-brand-name span {
+  color: #66836c;
+}
+
+.ngo-brand-section {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #9aa39c;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.ngo-topbar-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+/* =========================================================
+   WELCOME
+   ========================================================= */
+
+.ngo-welcome {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  padding: 52px 0 38px;
+}
+
+.ngo-welcome-copy {
+  max-width: 700px;
+}
+
+.ngo-eyebrow,
+.ngo-section-eyebrow {
+  display: block;
+
+  color: #718b76;
+
+  font-size: 8px;
+
+  font-weight: 850;
+
+  letter-spacing: 0.17em;
+}
+
+.ngo-welcome h1 {
+  margin: 13px 0 0;
+
+  color: #29382f;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(46px, 5vw, 66px);
+
+  font-weight: 400;
+
+  line-height: 0.97;
+
+  letter-spacing: -0.045em;
+}
+
+.ngo-welcome h1 span {
+  color: #66846c;
+
+  font-style: italic;
+}
+
+.ngo-welcome-copy > p {
+  max-width: 590px;
+
+  margin: 21px 0 0;
+
+  color: #7e8981;
+
+  font-size: 12px;
+
+  line-height: 1.75;
+}
+
+.ngo-welcome-side {
+  text-align: right;
+
+  padding-bottom: 4px;
+}
+
+.ngo-network-status {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 8px 11px;
+
+  border: 1px solid #dce7da;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.65);
+
+  color: #718078;
+
+  font-size: 8px;
+
+  font-weight: 750;
+}
+
+.ngo-live-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #6f9275;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(111, 146, 117, 0.1);
+}
+
+.ngo-location-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 4px;
+
+  margin-top: 12px;
+
+  color: #a0a9a2;
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.13em;
+}
+
+/* =========================================================
+   VERIFICATION
+   ========================================================= */
+
+.ngo-verification {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 25px;
+
+  padding: 13px 15px;
+
+  border: 1px solid #eadfce;
+
+  border-radius: 12px;
+
+  background: #fcf8f1;
+}
+
+.ngo-verification-icon {
+  width: 37px;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background: #f0e4d2;
+
+  color: #927454;
+}
+
+.ngo-verification-content {
+  flex: 1;
+}
+
+.ngo-verification-content strong {
+  display: block;
+
+  color: #74604c;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+.ngo-verification-content p {
+  margin: 3px 0 0;
+
+  color: #9b8b79;
+
+  font-size: 8.5px;
+
+  line-height: 1.5;
+}
+
+.ngo-verification-status {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 6px 9px;
+
+  border-radius: 7px;
+
+  background: #f3eadc;
+
+  color: #927454;
+
+  font-size: 8px;
+
+  font-weight: 800;
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.ngo-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 12px;
+
+  margin-bottom: 26px;
+}
+
+.ngo-stat-card {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-height: 78px;
+
+  padding: 15px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #e0e8de;
+
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  box-shadow:
+    0 5px 20px
+    rgba(53, 75, 57, 0.025);
+}
+
+.ngo-stat-icon {
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background: #e7efe5;
+
+  color: #64806a;
+}
+
+.ngo-stat-card span {
+  display: block;
+
+  color: #929d95;
+
+  font-size: 7px;
+
+  font-weight: 850;
+
+  letter-spacing: 0.12em;
+}
+
+.ngo-stat-card strong {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #4d6153;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+.ngo-stat-card p {
+  margin: 1px 0 0;
+
+  color: #9ba39d;
+
+  font-size: 8px;
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.ngo-navigation {
+  margin-bottom: 35px;
+
+  border-bottom: 1px solid #dfe7dd;
+}
+
+.ngo-tabs {
+  display: flex;
+
+  gap: 8px;
+}
+
+.ngo-tab {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  min-height: 45px;
+
+  padding: 0 13px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #929c95;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+.ngo-tab:hover {
+  color: #607568;
+}
+
+.ngo-tab.active {
+  color: #526b58;
+}
+
+.ngo-tab-indicator {
+  position: absolute;
+
+  left: 9px;
+  right: 9px;
+  bottom: -1px;
+
+  height: 2px;
+
+  border-radius: 2px;
+
+  background: #638069;
+}
+
+.ngo-tab-count {
+  min-width: 17px;
+  height: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 4px;
+
+  box-sizing: border-box;
+
+  border-radius: 9px;
+
+  background: #e7efe5;
+
+  color: #64806a;
+
+  font-size: 7px;
+
+  font-weight: 850;
+}
+
+/* =========================================================
+   CONTENT SECTION
+   ========================================================= */
+
+.ngo-content-section {
+  margin-bottom: 45px;
+}
+
+.ngo-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 18px;
+}
+
+.ngo-section-header h2 {
+  margin: 7px 0 0;
+
+  color: #33443a;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 31px;
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: -0.035em;
+}
+
+.ngo-section-header h2 span {
+  color: #6c8872;
+
+  font-style: italic;
+}
+
+.ngo-section-header p {
+  margin: 9px 0 0;
+
+  color: #929c95;
+
+  font-size: 9px;
+
+  line-height: 1.6;
+}
+
+/* =========================================================
+   RADIUS CONTROL
+   ========================================================= */
+
+.ngo-radius-control {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 8px 10px;
+
+  border: 1px solid #dce5da;
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.ngo-radius-control label {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color: #77867c;
+
+  font-size: 8px;
+
+  font-weight: 750;
+
+  white-space: nowrap;
+}
+
+.ngo-radius-control label svg {
+  color: #718b76;
+}
+
+.ngo-radius-control select {
+  min-width: 66px;
+
+  padding: 5px 4px;
+
+  border: 0;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #52655a;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   RADIUS SUMMARY
+   ========================================================= */
+
+.ngo-radius-summary {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  margin-bottom: 14px;
+
+  padding: 11px 13px;
+
+  border: 1px solid #dfe8dc;
+
+  border-radius: 11px;
+
+  background: #f7faf6;
+}
+
+.radius-summary-icon {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  background: #e6eee3;
+
+  color: #66836c;
+}
+
+.ngo-radius-summary div:nth-child(2) {
+  flex: 1;
+}
+
+.ngo-radius-summary strong {
+  display: block;
+
+  color: #596b60;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+.ngo-radius-summary span {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #9aa39d;
+
+  font-size: 8px;
+}
+
+.ngo-radius-summary > svg {
+  color: #91a095;
+}
+
+/* =========================================================
+   FOOD CARD
+   ========================================================= */
+
+.ngo-food-card {
+  overflow: hidden;
+
+  border: 1px solid #dfe7dd;
+
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, 0.76);
+
+  box-shadow:
+    0 10px 30px
+    rgba(53, 75, 57, 0.035);
+}
+
+/* =========================================================
+   CLAIMS COUNT
+   ========================================================= */
+
+.ngo-claims-count {
+  text-align: right;
+}
+
+.ngo-claims-count span {
+  display: block;
+
+  color: #9aa39c;
+
+  font-size: 7px;
+
+  font-weight: 850;
+
+  letter-spacing: 0.12em;
+}
+
+.ngo-claims-count strong {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #5f7866;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 23px;
+
+  font-weight: 500;
+}
+
+/* =========================================================
+   CLAIM LIST
+   ========================================================= */
+
+.ngo-claims-list {
+  display: grid;
+
+  gap: 12px;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.ngo-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 55px 25px;
+
+  border: 1px solid #dfe7dd;
+
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  text-align: center;
+}
+
+.ngo-empty-icon {
+  width: 55px;
+  height: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  border-radius: 16px;
+
+  background: #e7efe5;
+
+  color: #638069;
+}
+
+.ngo-empty-state h3 {
+  margin: 9px 0 0;
+
+  color: #4f6155;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 24px;
+
+  font-weight: 400;
+}
+
+.ngo-empty-state p {
+  max-width: 400px;
+
+  margin: 10px 0 0;
+
+  color: #929c95;
+
+  font-size: 9px;
+
+  line-height: 1.7;
+}
+
+.ngo-empty-button {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-top: 20px;
+
+  padding: 10px 14px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  background: #587960;
+
+  color: #fff;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.ngo-empty-button:hover {
+  background: #496b50;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.ngo-claims-loading {
+  display: grid;
+
+  gap: 12px;
+}
+
+.ngo-loading-card {
+  padding: 20px;
+
+  border: 1px solid #e1e8df;
+
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.ngo-loading-line {
+  height: 9px;
+
+  margin-bottom: 10px;
+
+  border-radius: 6px;
+
+  background: #e8eee6;
+
+  animation: ngo-loading 1.4s ease-in-out infinite;
+}
+
+.ngo-loading-line.large {
+  width: 65%;
+}
+
+.ngo-loading-line.medium {
+  width: 45%;
+}
+
+.ngo-loading-line.small {
+  width: 25%;
+
+  margin-bottom: 0;
+}
+
+@keyframes ngo-loading {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   COMMUNITY CARD
+   ========================================================= */
+
+.ngo-community-card {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 38px;
+
+  padding: 16px;
+
+  border: 1px solid #dce7da;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf4eb,
+      #f7faf5
+    );
+}
+
+.ngo-community-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 11px;
+
+  background: #dce9da;
+
+  color: #638069;
+}
+
+.ngo-community-card div:nth-child(2) {
+  flex: 1;
+}
+
+.ngo-community-card span {
+  display: block;
+
+  color: #78907d;
+
+  font-size: 7px;
+
+  font-weight: 850;
+
+  letter-spacing: 0.13em;
+}
+
+.ngo-community-card strong {
+  display: block;
+
+  max-width: 700px;
+
+  margin-top: 4px;
+
+  color: #5a6d60;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 12px;
+
+  font-weight: 500;
+
+  line-height: 1.4;
+}
+
+.ngo-community-card > svg {
+  color: #91a095;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.ngo-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-top: 22px;
+
+  border-top: 1px solid #e1e8df;
+
+  color: #a0a9a2;
+
+  font-size: 8px;
+}
+
+.ngo-footer-brand {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  color: #6f8874;
+
+  font-weight: 800;
+}
+
+.ngo-footer-brand svg {
+  color: #78927d;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+  .ngo-dashboard-shell {
+    width: min(100% - 36px, 720px);
+  }
+
+  .ngo-welcome {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    padding: 40px 0 30px;
+  }
+
+  .ngo-welcome-side {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    text-align: left;
+  }
+
+  .ngo-location-label {
+    justify-content: flex-start;
+
+    margin-top: 0;
+  }
+
+  .ngo-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .ngo-stat-card {
+    min-height: 70px;
+  }
+
+  .ngo-section-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .ngo-radius-control {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    justify-content: space-between;
+  }
+
+  .ngo-radius-control select {
+    flex: 1;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 550px) {
+  .ngo-dashboard-shell {
+    width: calc(100% - 28px);
+
+    padding-top: 16px;
+  }
+
+  .ngo-topbar {
+    padding-bottom: 14px;
+  }
+
+  .ngo-brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .ngo-brand-name {
+    font-size: 17px;
+  }
+
+  .ngo-brand-section {
+    font-size: 7px;
+  }
+
+  .ngo-welcome {
+    padding: 35px 0 25px;
+  }
+
+  .ngo-welcome h1 {
+    font-size: 42px;
+  }
+
+  .ngo-welcome-copy > p {
+    font-size: 10.5px;
+  }
+
+  .ngo-welcome-side {
+    display: none;
+  }
+
+  .ngo-verification {
+    align-items: flex-start;
+
+    padding: 12px;
+  }
+
+  .ngo-verification-status {
+    display: none;
+  }
+
+  .ngo-verification-content p {
+    font-size: 8px;
+  }
+
+  .ngo-tabs {
+    width: 100%;
+  }
+
+  .ngo-tab {
+    flex: 1;
+
+    justify-content: center;
+
+    padding: 0 8px;
+
+    font-size: 8px;
+  }
+
+  .ngo-section-header h2 {
+    font-size: 27px;
+  }
+
+  .ngo-radius-summary {
+    align-items: flex-start;
+  }
+
+  .ngo-radius-summary > svg {
+    display: none;
+  }
+
+  .ngo-food-card {
+    border-radius: 12px;
+  }
+
+  .ngo-empty-state {
+    padding: 45px 18px;
+  }
+
+  .ngo-community-card {
+    align-items: flex-start;
+  }
+
+  .ngo-community-card > svg {
+    display: none;
+  }
+
+  .ngo-footer {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 7px;
+  }
+}
